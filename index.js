@@ -1,14 +1,14 @@
 const express                           = require('express');
 const {decorate}                        = require('core-decorators');
 const uuid                              = require('uuid');
-const ExpressDecorators                 = require('./express-decorators');
-const {Root, Path, GetParam, PostParam} = ExpressDecorators;
+const Expresserator                     = require('./Expresserator');
+const {Root, Path, GetParam, PostParam, TYPE_BOOLEAN, TYPE_NUMBER, TYPE_STRING, TYPE_ARRAY} = Expresserator;
 const compression                       = require('compression');
 const bodyParser                        = require('body-parser');
 
-const app                   = express();
-ExpressDecorators.app       = app;
-ExpressDecorators.errorJson = function(errString) {
+const app               = express();
+Expresserator.app       = app;
+Expresserator.errorJson = function(errString) {
   return {
     success: false,
     error  : errString
@@ -30,19 +30,22 @@ async function timeout(ms) {
 class Greeter {
 
   @Path('/hello', 'get')
-  @GetParam('foo', {type: 'number', required: true})
-  @GetParam('bar', {type: 'number', required: false})
-  async helloGet(req, res, next, foo, bar) {
+  @GetParam('fooNumber', {type: TYPE_NUMBER, required: true})
+  @GetParam('fooString', {type: TYPE_STRING, required: true})
+  @GetParam('fooBoolean', {type: TYPE_BOOLEAN, required: true})
+  async helloGet(req, res, next, fooNumber, fooString, fooBoolean) {
     await timeout(100);
-    res.json({greeting: `Hello Get. Foo ${foo} Bar ${bar}`});
+    res.json({greeting: `Hello Get. fooNumber ${fooNumber} fooString ${fooString} fooBoolean ${fooBoolean}`});
   }
 
   @Path('/hello', 'post')
-  @PostParam('foo', {type: 'number', required: true})
-  @PostParam('bar', {type: 'number', required: false})
-  async helloPost(req, res, next, foo, bar) {
+  @PostParam('fooNumber', {type: TYPE_NUMBER, required: true})
+  @PostParam('fooArray', {type: TYPE_ARRAY, required: true})
+  @PostParam('fooString', {type: TYPE_STRING, required: true})
+  @PostParam('fooBoolean', {type: TYPE_BOOLEAN, required: true})
+  async helloPost(req, res, next, fooNumber, fooArray, fooString, fooBoolean) {
     await timeout(100);
-    res.json({greeting: `Hello Post. Foo ${foo} Bar ${bar}`});
+    res.json({greeting: `Hello Post. fooNumber ${fooNumber} fooArray ${fooArray} fooString ${fooString} fooBoolean ${fooBoolean}`});
   }
 }
 
