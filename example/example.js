@@ -29,6 +29,9 @@ async function timeout(ms) {
 
 @Root('/foo')
 class Greeter {
+  foobar() {
+    console.log(111);
+  }
 
   @Path('/hello', 'get')
   @GetParam('fooNumber', {type: TYPE_NUMBER, required: true})
@@ -36,6 +39,7 @@ class Greeter {
   @GetParam('fooBoolean', {type: TYPE_BOOLEAN, required: true})
   async helloGet(req, res, next, fooNumber, fooString, fooBoolean) {
     await timeout(100);
+    this.foobar();
     res.json({greeting: `Hello Get. fooNumber ${fooNumber} fooString ${fooString} fooBoolean ${fooBoolean}`});
   }
 

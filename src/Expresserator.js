@@ -147,18 +147,27 @@ const Expresserator = {
   },
   GetParam(queryName, opts) {
     return function(target, name, descriptor) {
-      const oldFunc = target[name];
+      const oldFunc = target[name].bind(new target.constructor());
       target[name]  = async function(req, res, next) {
-        const queryVal = req.query[queryName];
+        const queryVal = req.query ? req.query[queryName] : null;
+        await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'get');
+      }
+    }
+  },
+  PathParam(queryName, opts) {
+    return function(target, name, descriptor) {
+      const oldFunc = target[name].bind(new target.constructor());
+      target[name]  = async function(req, res, next) {
+        const queryVal = req.params ? req.params[queryName] : null;
         await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'get');
       }
     }
   },
   PostParam(paramName, opts) {
     return function(target, name, descriptor) {
-      const oldFunc = target[name];
+      const oldFunc = target[name].bind(new target.constructor());
       target[name]  = async function(req, res, next) {
-        const paramVal = req.body[paramName];
+        const paramVal = req.body ? req.body[paramName] : null;
         await _validateParamAndPassOn(paramName, paramVal, opts, oldFunc, arguments, res, 'post');
       }
     }
