@@ -26,4 +26,5 @@ class Greeter {
     await timeout(100);
     res.json({greeting: `Hello Post. fooNumber ${fooNumber} fooArray ${fooArray} fooString ${fooString} fooBoolean ${fooBoolean}`});
   }
-}```
+}
+```
