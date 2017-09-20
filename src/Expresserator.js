@@ -61,7 +61,8 @@ function _isValidParamType(opts, httpVerb) {
       opts.type === Expresserator.TYPE_ARRAY ||
       opts.type === Expresserator.TYPE_BOOLEAN ||
       opts.type === Expresserator.TYPE_STRING ||
-      opts.type === Expresserator.TYPE_NUMBER)) {
+      opts.type === Expresserator.TYPE_NUMBER ||
+      opts.type === Expresserator.TYPE_OBJECT)) {
     return true;
   } else if (httpVerb.toLowerCase() === 'get' && (
       opts.type === Expresserator.TYPE_BOOLEAN ||
