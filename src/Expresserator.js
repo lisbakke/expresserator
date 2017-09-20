@@ -48,6 +48,14 @@ function _parseString(paramVal) {
   return [true, null];
 }
 
+// TODO(lisbakke): Allow more advanced object shape parsing.
+function _parseObject(paramVal) {
+  if (typeof paramVal === 'object') {
+    return [false, paramVal];
+  }
+  return [true, null];
+}
+
 function _isValidParamType(opts, httpVerb) {
   if (httpVerb.toLowerCase() === 'post' && (
       opts.type === Expresserator.TYPE_ARRAY ||
@@ -85,6 +93,7 @@ async function _validateParamAndPassOn(paramName: String, paramVal: Any, opts: ?
   if (opts.type === Expresserator.TYPE_ARRAY) [parseError, parsedValue] = _parseArray(parsedValue);
   if (opts.type === Expresserator.TYPE_BOOLEAN) [parseError, parsedValue] = _parseBoolean(parsedValue);
   if (opts.type === Expresserator.TYPE_STRING) [parseError, parsedValue] = _parseString(parsedValue);
+  if (opts.type === Expresserator.TYPE_OBJECT) [parseError, parsedValue] = _parseObject(parsedValue);
   if (parseError) {
     res.json(Expresserator.errorJson(`Could not parse '${paramName}' as type ${opts.type}!`));
     return;
@@ -93,7 +102,7 @@ async function _validateParamAndPassOn(paramName: String, paramVal: Any, opts: ?
 }
 
 const Expresserator = {
-  // TODO(lisbakke): TYPE_OBJECT
+  TYPE_OBJECT : 'object',
   TYPE_NUMBER : 'number',
   TYPE_ARRAY  : 'array',
   TYPE_STRING : 'string',
