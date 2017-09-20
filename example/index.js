@@ -1,10 +1,11 @@
-const express                           = require('express');
-const {decorate}                        = require('core-decorators');
-const uuid                              = require('uuid');
-const Expresserator                     = require('./Expresserator');
+const express       = require('express');
+const {decorate}    = require('core-decorators');
+const uuid          = require('uuid');
+const Expresserator = require('../src/Expresserator');
+const compression   = require('compression');
+const bodyParser    = require('body-parser');
+
 const {Root, Path, GetParam, PostParam, TYPE_BOOLEAN, TYPE_NUMBER, TYPE_STRING, TYPE_ARRAY} = Expresserator;
-const compression                       = require('compression');
-const bodyParser                        = require('body-parser');
 
 const app               = express();
 Expresserator.app       = app;
