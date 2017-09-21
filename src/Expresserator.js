@@ -113,7 +113,7 @@ async function _validateParamAndPassOn(paramName: String, paramVal: Any, opts: ?
     res.json(Expresserator.errorJson(`Could not parse '${paramName}' as type ${opts.type}!`));
     return;
   }
-  await oldFunc(...oldArgs, parsedValue);
+  return await oldFunc(...oldArgs, parsedValue);
 }
 
 const Expresserator = {
@@ -162,28 +162,28 @@ const Expresserator = {
   },
   GetParam(queryName, opts) {
     return function(target, name, descriptor) {
-      const oldFunc = descriptor.value;
+      const oldFunc = descriptor.value.bind(new target.constructor());
       descriptor.value = async function(req, res, next) {
         const queryVal = req.query ? req.query[queryName] : null;
-        await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'get');
+        return await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'get');
       }
     }
   },
   PathParam(queryName, opts) {
     return function(target, name, descriptor) {
-      const oldFunc = descriptor.value;
+      const oldFunc = descriptor.value.bind(new target.constructor());;
       descriptor.value = async function(req, res, next) {
         const queryVal = req.params ? req.params[queryName] : null;
-        await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'any');
+        return await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'any');
       };
     }
   },
   PostParam(paramName, opts) {
     return function(target, name, descriptor) {
-      const oldFunc = descriptor.value;
+      const oldFunc = descriptor.value.bind(new target.constructor());;
       descriptor.value = async function(req, res, next) {
         const paramVal = req.body ? req.body[paramName] : null;
-        await _validateParamAndPassOn(paramName, paramVal, opts, oldFunc, arguments, res, 'post');
+        return await _validateParamAndPassOn(paramName, paramVal, opts, oldFunc, arguments, res, 'post');
       }
     }
   }
