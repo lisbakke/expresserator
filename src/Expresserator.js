@@ -98,8 +98,7 @@ async function _validateParamAndPassOn(paramName: String, paramVal: Any, opts: ?
       res.json(Expresserator.errorJson(`'${paramName}' is required!`));
       return null;
     } else {
-      await oldFunc(...oldArgs, null);
-      return null;
+      return await oldFunc(...oldArgs, null);
     }
   }
   let parsedValue = paramVal;

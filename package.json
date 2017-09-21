@@ -1,6 +1,6 @@
 {
   "name": "@lisbakke/expresserator",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "expresserator",
   "main": "index.js",
   "engines": {
