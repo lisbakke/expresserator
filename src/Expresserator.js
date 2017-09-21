@@ -166,25 +166,28 @@ const Expresserator = {
       descriptor.value = async function(req, res, next) {
         const queryVal = req.query ? req.query[queryName] : null;
         return await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'get');
-      }
+      };
+      target[name]  = descriptor.value
     }
   },
   PathParam(queryName, opts) {
     return function(target, name, descriptor) {
-      const oldFunc = descriptor.value.bind(new target.constructor());;
+      const oldFunc = descriptor.value.bind(new target.constructor());
       descriptor.value = async function(req, res, next) {
         const queryVal = req.params ? req.params[queryName] : null;
         return await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'any');
       };
+      target[name]  = descriptor.value
     }
   },
   PostParam(paramName, opts) {
     return function(target, name, descriptor) {
-      const oldFunc = descriptor.value.bind(new target.constructor());;
+      const oldFunc = descriptor.value.bind(new target.constructor());
       descriptor.value = async function(req, res, next) {
         const paramVal = req.body ? req.body[paramName] : null;
         return await _validateParamAndPassOn(paramName, paramVal, opts, oldFunc, arguments, res, 'post');
       }
+      target[name]  = descriptor.value
     }
   }
 };
