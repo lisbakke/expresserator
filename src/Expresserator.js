@@ -44,6 +44,13 @@ function _parseBoolean(paramVal) {
 function _parseString(paramVal) {
   if (typeof paramVal === 'string') {
     return [false, paramVal];
+  } else {
+    try {
+      const stringVal:String = paramVal.toString();
+      return [false, stringVal];
+    } catch(e) {
+      return [true, null]
+    }
   }
   return [true, null];
 }
@@ -68,6 +75,13 @@ function _isValidParamType(opts, httpVerb) {
       opts.type === Expresserator.TYPE_BOOLEAN ||
       opts.type === Expresserator.TYPE_STRING ||
       opts.type === Expresserator.TYPE_NUMBER)) {
+    return true;
+  } else if (httpVerb.toLowerCase() === 'any' && (
+      opts.type === Expresserator.TYPE_ARRAY ||
+      opts.type === Expresserator.TYPE_BOOLEAN ||
+      opts.type === Expresserator.TYPE_STRING ||
+      opts.type === Expresserator.TYPE_NUMBER ||
+      opts.type === Expresserator.TYPE_OBJECT)) {
     return true;
   }
   return false;
@@ -160,7 +174,7 @@ const Expresserator = {
       const oldFunc = target[name].bind(new target.constructor());
       target[name]  = async function(req, res, next) {
         const queryVal = req.params ? req.params[queryName] : null;
-        await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'get');
+        await _validateParamAndPassOn(queryName, queryVal, opts, oldFunc, arguments, res, 'any');
       }
     }
   },
