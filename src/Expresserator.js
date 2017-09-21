@@ -91,15 +91,15 @@ async function _validateParamAndPassOn(paramName: String, paramVal: Any, opts: ?
                                        res: Object, httpVerb: String) {
   if (!_isValidParamType(opts, httpVerb)) {
     res.json(Expresserator.errorJson(`Invalid type '${opts.type}' for param '${paramName}' HTTP verb '${httpVerb}'`));
-    return true;
+    return null;
   }
   if (paramVal === null || paramVal === undefined) {
     if (opts.required === true) {
       res.json(Expresserator.errorJson(`'${paramName}' is required!`));
-      return;
+      return null;
     } else {
       await oldFunc(...oldArgs, null);
-      return;
+      return null;
     }
   }
   let parsedValue = paramVal;
@@ -111,7 +111,7 @@ async function _validateParamAndPassOn(paramName: String, paramVal: Any, opts: ?
   if (opts.type === Expresserator.TYPE_OBJECT) [parseError, parsedValue] = _parseObject(parsedValue);
   if (parseError) {
     res.json(Expresserator.errorJson(`Could not parse '${paramName}' as type ${opts.type}!`));
-    return;
+    return null;
   }
   return await oldFunc(...oldArgs, parsedValue);
 }
